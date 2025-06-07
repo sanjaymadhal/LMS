@@ -136,6 +136,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             <Icon sx={{ fontWeight: "bold" }}>close</Icon>
           </MDTypography>
         </MDBox>
+
         <MDBox component={NavLink} to="/" display="flex" alignItems="center">
           <MDBox component="img" src={pygenicLogo} alt="PyGenicArc Logo" width="3rem" />
           <MDBox ml={1} display="flex" flexDirection="column">
@@ -172,17 +173,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       <List>{renderRoutes}</List>
 
       <MDBox p={2} mt="auto">
-        <MDButton
-          component="a"
-          href="https://www.creative-tim.com/product/material-dashboard-pro-react"
-          target="_blank"
-          rel="noreferrer"
-          variant="gradient"
-          color={sidenavColor}
-          fullWidth
-        >
-          upgrade to pro
-        </MDButton>
+        <NavLink to="/profile" style={{ textDecoration: "none" }}>
+          <MDButton variant="gradient" color={sidenavColor} fullWidth>
+            <Icon sx={{ mr: 1 }}>person</Icon>
+            Profile
+          </MDButton>
+        </NavLink>
       </MDBox>
     </SidenavRoot>
   );

@@ -8,7 +8,7 @@
 
 Coded by www.creative-tim.com
 
- =========================================================
+=========================================================
 
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState, useEffect } from "react";
 
 // react-router components
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
@@ -26,6 +26,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
@@ -57,51 +58,71 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
-  const [openMenu, setOpenMenu] = useState(false);
+  const [openNotifMenu, setOpenNotifMenu] = useState(false);
+  const [openProfileMenu, setOpenProfileMenu] = useState(false);
+  const [anchorNotifEl, setAnchorNotifEl] = useState(null);
+  const [anchorProfileEl, setAnchorProfileEl] = useState(null);
   const route = useLocation().pathname.split("/").slice(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Setting the navbar type
     if (fixedNavbar) {
       setNavbarType("sticky");
     } else {
       setNavbarType("static");
     }
 
-    // A function that sets the transparent state of the navbar.
     function handleTransparentNavbar() {
       setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
     }
 
-    /** 
-     The event listener that's calling the handleTransparentNavbar function when 
-     scrolling the window.
-    */
     window.addEventListener("scroll", handleTransparentNavbar);
-
-    // Call the handleTransparentNavbar function to set the state with the initial value.
     handleTransparentNavbar();
 
-    // Remove event listener on cleanup
     return () => window.removeEventListener("scroll", handleTransparentNavbar);
   }, [dispatch, fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
-  const handleOpenMenu = (event) => setOpenMenu(event.currentTarget);
-  const handleCloseMenu = () => setOpenMenu(false);
 
-  // Render the notifications menu
-  const renderMenu = () => (
+  // Notifications Menu Handlers
+  const handleOpenNotifMenu = (event) => {
+    setAnchorNotifEl(event.currentTarget);
+    setOpenNotifMenu(true);
+  };
+  const handleCloseNotifMenu = () => setOpenNotifMenu(false);
+
+  // Profile Menu Handlers
+  const handleOpenProfileMenu = (event) => {
+    setAnchorProfileEl(event.currentTarget);
+    setOpenProfileMenu(true);
+  };
+  const handleCloseProfileMenu = () => setOpenProfileMenu(false);
+
+  const handleGoToProfile = () => {
+    handleCloseProfileMenu();
+    navigate("/profile");
+  };
+
+  const handleGoToSettings = () => {
+    handleCloseProfileMenu();
+    navigate("/settings");
+  };
+
+  const handleSignOut = () => {
+    handleCloseProfileMenu();
+    // Add sign out logic here
+  };
+
+  const handleOpenELearning = () => {
+    window.open("https://example.com/coming-soon", "_blank");
+  };
+
+  const renderNotifMenu = () => (
     <Menu
-      anchorEl={openMenu}
-      anchorReference={null}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "left",
-      }}
-      open={Boolean(openMenu)}
-      onClose={handleCloseMenu}
+      anchorEl={anchorNotifEl}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      open={openNotifMenu}
+      onClose={handleCloseNotifMenu}
       sx={{ mt: 2 }}
     >
       <NotificationItem icon={<Icon>email</Icon>} title="Check new messages" />
@@ -110,15 +131,35 @@ function DashboardNavbar({ absolute, light, isMini }) {
     </Menu>
   );
 
-  // Styles for the navbar icons
+  const renderProfileMenu = () => (
+    <Menu
+      anchorEl={anchorProfileEl}
+      anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      open={openProfileMenu}
+      onClose={handleCloseProfileMenu}
+      sx={{ mt: 2 }}
+    >
+      <MenuItem onClick={handleGoToProfile}>
+        <Icon sx={{ mr: 1 }}>person</Icon>
+        Your profile
+      </MenuItem>
+      <MenuItem onClick={handleGoToSettings}>
+        <Icon sx={{ mr: 1 }}>settings</Icon>
+        Settings
+      </MenuItem>
+      <MenuItem onClick={handleSignOut}>
+        <Icon sx={{ mr: 1 }}>logout</Icon>
+        Sign out
+      </MenuItem>
+    </Menu>
+  );
+
   const iconsStyle = ({ palette: { dark, white, text }, functions: { rgba } }) => ({
     color: () => {
       let colorValue = light || darkMode ? white.main : dark.main;
-
       if (transparentNavbar && !light) {
         colorValue = darkMode ? rgba(text.main, 0.6) : text.main;
       }
-
       return colorValue;
     },
   });
@@ -139,11 +180,44 @@ function DashboardNavbar({ absolute, light, isMini }) {
               <MDInput label="Search here" />
             </MDBox>
             <MDBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in/basic">
-                <IconButton sx={navbarIconButton} size="small" disableRipple>
-                  <Icon sx={iconsStyle}>account_circle</Icon>
-                </IconButton>
-              </Link>
+              {/* Notifications */}
+              <IconButton
+                size="small"
+                disableRipple
+                color="inherit"
+                sx={navbarIconButton}
+                aria-controls="notification-menu"
+                aria-haspopup="true"
+                onClick={handleOpenNotifMenu}
+              >
+                <Icon sx={iconsStyle}>notifications</Icon>
+              </IconButton>
+
+              {/* E-learning Icon */}
+              <IconButton
+                size="small"
+                disableRipple
+                color="inherit"
+                sx={navbarIconButton}
+                onClick={handleOpenELearning}
+              >
+                <Icon sx={iconsStyle}>school</Icon>
+              </IconButton>
+
+              {/* Profile Icon */}
+              <IconButton
+                size="small"
+                disableRipple
+                color="inherit"
+                sx={navbarIconButton}
+                aria-controls="profile-menu"
+                aria-haspopup="true"
+                onClick={handleOpenProfileMenu}
+              >
+                <Icon sx={iconsStyle}>account_circle</Icon>
+              </IconButton>
+
+              {/* Sidebar Toggle */}
               <IconButton
                 size="small"
                 disableRipple
@@ -155,28 +229,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   {miniSidenav ? "menu_open" : "menu"}
                 </Icon>
               </IconButton>
-              <IconButton
-                size="small"
-                disableRipple
-                color="inherit"
-                sx={navbarIconButton}
-                onClick={handleConfiguratorOpen}
-              >
-                <Icon sx={iconsStyle}>settings</Icon>
-              </IconButton>
-              <IconButton
-                size="small"
-                disableRipple
-                color="inherit"
-                sx={navbarIconButton}
-                aria-controls="notification-menu"
-                aria-haspopup="true"
-                variant="contained"
-                onClick={handleOpenMenu}
-              >
-                <Icon sx={iconsStyle}>notifications</Icon>
-              </IconButton>
-              {renderMenu()}
+
+              {/* Render Menus */}
+              {renderNotifMenu()}
+              {renderProfileMenu()}
             </MDBox>
           </MDBox>
         )}
