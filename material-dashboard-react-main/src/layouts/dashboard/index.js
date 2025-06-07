@@ -46,13 +46,13 @@ function Dashboard() {
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
-                color="dark"
-                icon="weekend"
-                title="Bookings"
-                count={281}
+                color="light"
+                icon="people_alt"
+                title="Active Students"
+                count={60}
                 percentage={{
                   color: "success",
-                  amount: "+55%",
+                  amount: "+15%",
                   label: "than lask week",
                 }}
               />
@@ -61,13 +61,13 @@ function Dashboard() {
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
-                icon="leaderboard"
-                title="Today's Users"
-                count="2,300"
+                icon="percent"
+                title="Completion Rate"
+                count="75%"
                 percentage={{
                   color: "success",
                   amount: "+3%",
-                  label: "than last month",
+                  label: "than last semester",
                 }}
               />
             </MDBox>
@@ -75,10 +75,10 @@ function Dashboard() {
           <Grid item xs={12} md={6} lg={3}>
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
-                color="success"
-                icon="store"
-                title="Revenue"
-                count="34k"
+                color="warning"
+                icon="feedback"
+                title="Feedbacks"
+                count="34"
                 percentage={{
                   color: "success",
                   amount: "+1%",
@@ -92,8 +92,8 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Followers"
-                count="+91"
+                title="Enrollments"
+                count="+11"
                 percentage={{
                   color: "success",
                   amount: "",
@@ -109,9 +109,9 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsBarChart
                   color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
+                  title="Atendance Rate"
+                  description="Daily record of student attendance"
+                  date="recorded 2 days ago"
                   chart={reportsBarChartData}
                 />
               </MDBox>
@@ -120,13 +120,13 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="success"
-                  title="daily sales"
+                  title="Class Performance"
                   description={
                     <>
-                      (<strong>+15%</strong>) increase in today sales.
+                      <strong>+10%</strong> increase in students performance.
                     </>
                   }
-                  date="updated 4 min ago"
+                  date="updated a day ago"
                   chart={sales}
                 />
               </MDBox>
@@ -135,8 +135,8 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
+                  title="Assisgnments Submissions"
+                  description="Weekly overview of assignments submitted by students"
                   date="just updated"
                   chart={tasks}
                 />
