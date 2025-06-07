@@ -9,8 +9,10 @@
 Coded by www.creative-tim.com
 
  =========================================================
-*/
 
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+*/
+// Material Dashboard 2 React components
 import { useEffect } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -24,7 +26,7 @@ import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
-import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
+
 import {
   useMaterialUIController,
   setMiniSidenav,
@@ -45,13 +47,13 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     textColor = "inherit";
   }
 
-  const closeSidenav = () => setMiniSidenav(dispatch, true);
+  const toggleSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
 
   useEffect(() => {
     function handleMiniSidenav() {
       setMiniSidenav(dispatch, window.innerWidth < 1200);
-      setTransparentSidenav(dispatch, window.innerWidth < 1200 ? false : transparentSidenav);
-      setWhiteSidenav(dispatch, window.innerWidth < 1200 ? false : whiteSidenav);
+      setTransparentSidenav(dispatch, window.innerWidth >= 1200 && transparentSidenav);
+      setWhiteSidenav(dispatch, window.innerWidth >= 1200 && whiteSidenav);
     }
 
     window.addEventListener("resize", handleMiniSidenav);
@@ -61,13 +63,11 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }, [dispatch, location]);
 
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route }) => {
-    let returnValue;
-
     if (type === "collapse") {
-      returnValue = href ? (
+      return href ? (
         <Link
           href={href}
-          key={key}
+          key={keyVal}
           target="_blank"
           rel="noreferrer"
           sx={{ textDecoration: "none" }}
@@ -75,7 +75,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           <SidenavCollapse
             name={name}
             icon={icon}
-            active={key === collapseName}
+            active={keyVal === collapseName}
             noCollapse={noCollapse}
           />
         </Link>
@@ -85,7 +85,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         </NavLink>
       );
     } else if (type === "title") {
-      returnValue = (
+      return (
         <MDTypography
           key={key}
           color={textColor}
@@ -102,7 +102,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         </MDTypography>
       );
     } else if (type === "divider") {
-      returnValue = (
+      return (
         <Divider
           key={key}
           light={
@@ -112,8 +112,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         />
       );
     }
-
-    return returnValue;
+    return null;
   });
 
   return (
@@ -123,20 +122,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ownerState={{ transparentSidenav, whiteSidenav, miniSidenav, darkMode }}
     >
       <MDBox pt={3} pb={1} px={4} textAlign="center">
-        <MDBox
-          display={{ xs: "block", xl: "none" }}
-          position="absolute"
-          top={0}
-          right={0}
-          p={1.625}
-          onClick={closeSidenav}
-          sx={{ cursor: "pointer" }}
-        >
-          <MDTypography variant="h6" color="secondary">
-            <Icon sx={{ fontWeight: "bold" }}>close</Icon>
-          </MDTypography>
-        </MDBox>
-
         <MDBox component={NavLink} to="/" display="flex" alignItems="center">
           <MDBox component="img" src={pygenicLogo} alt="PyGenicArc Logo" width="3rem" />
           <MDBox ml={1} display="flex" flexDirection="column">
@@ -161,15 +146,29 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             </MDTypography>
           </MDBox>
         </MDBox>
+
+        {/* Collapse Toggle Button */}
+        <MDBox display="flex" justifyContent="center" mt={2}>
+          <MDButton
+            variant="outlined"
+            color="white"
+            size="small"
+            onClick={toggleSidenav}
+            sx={{ transition: "all 0.3s ease-in-out" }}
+          >
+            <Icon
+              sx={{
+                transition: "transform 0.3s",
+                transform: miniSidenav ? "rotate(180deg)" : "rotate(0deg)",
+              }}
+            >
+              {miniSidenav ? "chevron_right" : "chevron_left"}
+            </Icon>
+          </MDButton>
+        </MDBox>
       </MDBox>
 
-      <Divider
-        light={
-          (!darkMode && !whiteSidenav && !transparentSidenav) ||
-          (darkMode && !transparentSidenav && whiteSidenav)
-        }
-      />
-
+      <Divider light={!darkMode || (darkMode && whiteSidenav)} />
       <List>{renderRoutes}</List>
 
       <MDBox p={2} mt="auto">

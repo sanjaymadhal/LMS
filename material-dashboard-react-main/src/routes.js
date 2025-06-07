@@ -37,8 +37,8 @@ import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import Notifications from "layouts/notifications";
 import Profile from "layouts/profile";
-import SignIn from "layouts/authentication/Assignments";
-import SignUp from "layouts/authentication/sign-up";
+//import SignIn from "layouts/authentication/Assignments";
+//import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
@@ -89,8 +89,8 @@ const routes = [
     name: "Assignments",
     key: "assignments",
     icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/Assignments",
-    component: <SignIn />,
+    //route: "/authentication/Assignments",
+    //component: <SignIn />,
   },
   {
     type: "collapse",
@@ -98,7 +98,7 @@ const routes = [
     key: "analytics",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
-    component: <SignUp />,
+    //component: <SignUp />,
   },
   {
     type: "collapse",
@@ -106,7 +106,7 @@ const routes = [
     key: "ai-tools",
     icon: <Icon fontSize="small">smart_toy</Icon>,
     route: "/authentication/sign-up",
-    component: <SignUp />,
+    //component: <SignUp />,
   },
   {
     type: "collapse",
@@ -114,7 +114,7 @@ const routes = [
     key: "workspace",
     icon: <Icon fontSize="small">workspaces</Icon>,
     route: "/authentication/sign-up",
-    component: <SignUp />,
+    //component: <SignUp />,
   },
 ];
 
