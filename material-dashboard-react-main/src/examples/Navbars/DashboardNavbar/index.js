@@ -105,7 +105,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   const handleGoToSettings = () => {
     handleCloseProfileMenu();
-    navigate("/settings");
+    setOpenConfigurator(dispatch, true);
   };
 
   const handleSignOut = () => {
