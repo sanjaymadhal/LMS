@@ -1,0 +1,13 @@
+// Example: src/app/views/courses/MyCourses.jsx
+import React from 'react';
+
+const MyCourses = () => {
+  return (
+    <div>
+      <h1>My Courses</h1>
+      <p>This is the My Courses page.</p>
+    </div>
+  );
+};
+
+export default MyCourses;

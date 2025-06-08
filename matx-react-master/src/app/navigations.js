@@ -36,9 +36,9 @@ const navigations = [
     name: "Assessments",
     icon: "assessment",
     children: [
-      { name: "Create Quiz", iconText: "CQ", path: "/assessments/create-quiz" },
-      { name: "Question Bank", iconText: "QB", path: "/assessments/question-bank" },
-      { name: "Exam Settings", iconText: "ES", path: "/assessments/exam-settings" }
+      { name: "Create Quiz", iconText: "CQ", path: "/assessments/Createquiz" },
+      { name: "Question Bank", iconText: "QB", path: "/assessments/Questionbank" },
+      { name: "Exam Settings", iconText: "ES", path: "/assessments/Examsettings" }
     ]
   },
   {

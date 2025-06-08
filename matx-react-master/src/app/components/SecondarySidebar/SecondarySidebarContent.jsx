@@ -44,7 +44,7 @@ export default function SecondarySidebarContent() {
     <SidebarRoot width={"50px"} className="secondary-sidebar">
       <Span m="auto" />
       <MatxCustomizer />
-      <ShoppingCart />
+      
 
       <ChatHead
         icon={

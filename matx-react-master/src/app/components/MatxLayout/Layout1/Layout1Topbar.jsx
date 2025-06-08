@@ -14,19 +14,13 @@ import Home from "@mui/icons-material/Home";
 import Menu from "@mui/icons-material/Menu";
 import Person from "@mui/icons-material/Person";
 import Settings from "@mui/icons-material/Settings";
-import { Grid, Tooltip, Chip, Badge, Stack } from '@mui/material';
+import { Grid, Tooltip, Chip } from '@mui/material';
 import PowerSettingsNew from "@mui/icons-material/PowerSettingsNew";
 import AppsIcon from "@mui/icons-material/Apps";
 import School from "@mui/icons-material/School";
 import Class from "@mui/icons-material/Class";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import Dashboard from "@mui/icons-material/Dashboard";
-import Assessment from "@mui/icons-material/Assessment";
-import Group from "@mui/icons-material/Group";
-import VideoCall from "@mui/icons-material/VideoCall";
-import CalendarToday from "@mui/icons-material/CalendarToday";
-
 import useAuth from "app/hooks/useAuth";
 import useSettings from "app/hooks/useSettings";
 import { Span } from "app/components/Typography";
@@ -368,7 +362,7 @@ const appMenuItems = [
 
 const AppMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const theme = useTheme();
+  
 
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
