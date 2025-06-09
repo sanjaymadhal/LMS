@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -14,7 +14,8 @@ import Home from "@mui/icons-material/Home";
 import Menu from "@mui/icons-material/Menu";
 import Person from "@mui/icons-material/Person";
 import Settings from "@mui/icons-material/Settings";
-import { Grid, Tooltip, Chip } from '@mui/material';
+import { Grid, Tooltip, Chip, LinearProgress } from '@mui/material';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PowerSettingsNew from "@mui/icons-material/PowerSettingsNew";
 import AppsIcon from "@mui/icons-material/Apps";
 import School from "@mui/icons-material/School";
@@ -91,6 +92,122 @@ const ThemeToggleButton = styled(IconButton)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.1)',
     transform: 'scale(1.1)'
   }
+}));
+
+// XP Progress Bar
+const XPProgressContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(1),
+  width: 200,
+  background: theme.palette.mode === 'dark' 
+    ? 'linear-gradient(135deg, #2C1810 0%, #1A1A2E 100%)'
+    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  padding: theme.spacing(0.5, 1),
+  borderRadius: 20,
+  border: `2px solid ${theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF'}`,
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 4px 20px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+    : '0 4px 20px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+  position: 'relative',
+  overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: '-100%',
+    width: '100%',
+    height: '100%',
+    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+    animation: `${slideIn} 2s infinite`,
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: 150,
+  },
+}));
+
+const XPProgressBar = styled(LinearProgress)(({ theme }) => ({
+  height: 12,
+  borderRadius: 10,
+  backgroundColor: theme.palette.mode === 'dark' ? '#3A2A1A' : 'rgba(255, 255, 255, 0.3)',
+  flex: 1,
+  position: 'relative',
+  overflow: 'hidden',
+  '& .MuiLinearProgress-bar': {
+    borderRadius: 10,
+    background: theme.palette.mode === 'dark'
+      ? 'linear-gradient(45deg, #FFD700 0%, #FFA500 25%, #FF6B35 50%, #F7931E 75%, #FFD700 100%)'
+      : 'linear-gradient(45deg, #00D4FF 0%, #00A8FF 25%, #0078FF 50%, #0066CC 75%, #004499 100%)',
+    transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+    position: 'relative',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
+      animation: `${slideIn} 2s infinite`,
+    }
+  },
+}));
+
+// Coins Component
+const CoinsContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(0.5),
+  backgroundColor: theme.palette.mode === 'dark' 
+    ? 'linear-gradient(135deg, #2C1810 0%, #1A1A2E 100%)'
+    : 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
+  padding: theme.spacing(0.5, 1.5),
+  borderRadius: 25,
+  border: `2px solid ${theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF'}`,
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 4px 15px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+    : '0 4px 15px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+  transition: 'all 0.3s ease',
+  cursor: 'pointer',
+  position: 'relative',
+  overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: '-100%',
+    width: '100%',
+    height: '100%',
+    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+    transition: 'left 0.6s ease',
+  },
+  '&:hover': {
+    transform: 'scale(1.05)',
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 6px 20px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+      : '0 6px 20px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+    '&::before': {
+      left: '100%',
+    }
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: theme.spacing(0.3, 1),
+  },
+}));
+
+const CoinIcon = styled(MonetizationOnIcon)(({ theme }) => ({
+  color: theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF',
+  fontSize: '1.2rem',
+  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
+  animation: `${pulse} 2s infinite ease-in-out`,
+}));
+
+const CoinText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF',
+  fontWeight: 700,
+  fontSize: '0.9rem',
+  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+  letterSpacing: '0.5px',
 }));
 
 // Enhanced App Menu Animations
@@ -357,13 +474,11 @@ const appMenuItems = [
     badge: "Live",
     color: "#2196F3"
   },
-  
 ];
 
 const AppMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   
-
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
   const open = Boolean(anchorEl);
@@ -471,13 +586,23 @@ const Layout1Topbar = () => {
   const { logout, user } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
+  // State for XP (starting at 200 as per the image)
+  const [xp, setXp] = useState(user?.xp || 200);
+  const xpForNextLevel = 1500; // Match the image's max XP
+  const [progress, setProgress] = useState((xp / xpForNextLevel) * 100);
+  
+  // State for coins
+  const [coins, setCoins] = useState(user?.coins || 1250);
+
+  // Update progress whenever XP changes
+  useEffect(() => {
+    setProgress((xp / xpForNextLevel) * 100);
+  }, [xp]);
+
   // Function to toggle between light and dark mode
   const toggleTheme = () => {
-    console.log("Current settings:", settings);
     const currentTheme = settings.theme?.palette?.type || 'light';
-    console.log("Current theme type:", currentTheme);
     const newThemeType = currentTheme === 'light' ? 'dark' : 'light';
-    console.log("Switching to:", newThemeType);
     
     updateSettings({
       theme: {
@@ -527,6 +652,45 @@ const Layout1Topbar = () => {
         <Box display="flex" alignItems="center" gap={1}>
           <MatxSearchBox />
           
+          {/* Coins Display */}
+          <Tooltip title="Your Coins Balance" arrow>
+            <CoinsContainer>
+              <CoinIcon />
+              <CoinText variant="caption">
+                {coins.toLocaleString()}
+              </CoinText>
+            </CoinsContainer>
+          </Tooltip>
+          
+          {/* XP Progress Bar */}
+          <Tooltip title={`${xp}/${xpForNextLevel} XP - Level Progress`} arrow>
+            <XPProgressContainer>
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  color: theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF',
+                  fontWeight: 700,
+                  fontSize: '0.75rem',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                }}
+              >
+                XP
+              </Typography>
+              <XPProgressBar variant="determinate" value={progress} />
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  color: theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF',
+                  fontWeight: 700,
+                  fontSize: '0.75rem',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                }}
+              >
+                {xp}/{xpForNextLevel}
+              </Typography>
+            </XPProgressContainer>
+          </Tooltip>
+
           {/* Enhanced App Menu */}
           <AppMenu />
 
