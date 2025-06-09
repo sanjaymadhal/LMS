@@ -573,10 +573,10 @@ const Layout1Topbar = () => {
   const { logout, user } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [xp, setXp] = useState(user?.xp || 200);
+  const [xp, setXp] = useState(user?.xp ?? 200);
   const xpForNextLevel = 1500;
-  const [progress, setProgress] = useState((xp / xpForNextLevel) * 100);
-  const [coins, setCoins] = useState(user?.coins || 1250);
+  const [progress, setProgress] = useState(((user?.xp ?? 200) / xpForNextLevel) * 100);
+  const [coins, setCoins] = useState(user?.coins ?? 1250);
 
   useEffect(() => {
     setProgress((xp / xpForNextLevel) * 100);

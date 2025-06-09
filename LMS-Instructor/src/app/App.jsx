@@ -10,8 +10,10 @@ import routes from "./routes";
 // FAKE SERVER
 import "../__api__";
 
+
 export default function App() {
   const content = useRoutes(routes);
+
 
   return (
     <SettingsProvider>
