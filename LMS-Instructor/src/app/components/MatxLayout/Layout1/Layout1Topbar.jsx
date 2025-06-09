@@ -31,6 +31,42 @@ import { NotificationBar } from "app/components/NotificationBar";
 import { themeShadows } from "app/components/MatxTheme/themeColors";
 import { topBarHeight } from "app/utils/constant";
 
+// Keyframes for animations
+const slideIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+`;
+
+const pulse = keyframes`
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+`;
+
+const shine = keyframes`
+  0% {
+    background-position: -200%;
+  }
+  100% {
+    background-position: 200%;
+  }
+`;
+
 // Styled components
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.text.primary,
@@ -80,7 +116,6 @@ const StyledItem = styled(MenuItem)(({ theme }) => ({
   "& span": { marginRight: "10px", color: theme.palette.text.primary }
 }));
 
-// Theme Switch Button
 const ThemeToggleButton = styled(IconButton)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.05)',
   borderRadius: '50%',
@@ -94,176 +129,129 @@ const ThemeToggleButton = styled(IconButton)(({ theme }) => ({
   }
 }));
 
-// XP Progress Bar
-const XPProgressContainer = styled(Box)(({ theme }) => ({
+// Enhanced Coins Component
+const CoinsContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(1),
-  width: 200,
-  background: theme.palette.mode === 'dark' 
-    ? 'linear-gradient(135deg, #2C1810 0%, #1A1A2E 100%)'
-    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  padding: theme.spacing(0.5, 1),
-  borderRadius: 20,
-  border: `2px solid ${theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF'}`,
+  background: theme.palette.mode === 'dark'
+    ? 'linear-gradient(145deg, #2a2a3a 0%, #1f1f2f 100%)'
+    : 'linear-gradient(145deg, #f5f7fa 0%, #e4e7eb 100%)',
+  padding: theme.spacing(0.6, 1.8),
+  borderRadius: 30,
+  border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 215, 0, 0.3)' : 'rgba(0, 0, 0, 0.1)'}`,
   boxShadow: theme.palette.mode === 'dark'
-    ? '0 4px 20px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 4px 20px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+    ? '0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+    : '0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  cursor: 'pointer',
   position: 'relative',
   overflow: 'hidden',
+  '&:hover': {
+    transform: 'scale(1.03)',
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 6px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+      : '0 6px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: theme.spacing(0.4, 1.2),
+  },
+}));
+
+const CoinIcon = styled(MonetizationOnIcon)(({ theme }) => ({
+  color: theme.palette.mode === 'dark' ? '#FFD700' : '#D4A017',
+  fontSize: '1.4rem',
+  background: theme.palette.mode === 'dark'
+    ? 'radial-gradient(circle at 30% 30%, #FFD700 0%, #D4A017 70%, #A67C00 100%)'
+    : 'radial-gradient(circle at 30% 30%, #FFE082 0%, #D4A017 70%, #A67C00 100%)',
+  borderRadius: '50%',
+  padding: '4px',
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 2px 8px rgba(255, 215, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)'
+    : '0 2px 8px rgba(212, 160, 23, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+  animation: `${pulse} 2.5s infinite ease-in-out`,
+  position: 'relative',
   '&::before': {
     content: '""',
     position: 'absolute',
     top: 0,
-    left: '-100%',
-    width: '100%',
-    height: '100%',
-    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
-    animation: `${slideIn} 2s infinite`,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.5), transparent)',
+    animation: `${shine} 3s infinite linear`,
+    backgroundSize: '200%',
+  },
+}));
+
+const CoinText = styled(Typography)(({ theme }) => ({
+  color: theme.palette.mode === 'dark' ? '#FFD700' : '#333333',
+  fontWeight: 600,
+  fontSize: '0.95rem',
+  letterSpacing: '0.5px',
+  textShadow: theme.palette.mode === 'dark'
+    ? '0 1px 2px rgba(0, 0, 0, 0.4)'
+    : '0 1px 2px rgba(255, 255, 255, 0.8)',
+}));
+
+// Enhanced XP Progress Bar with Blue Color
+const XPProgressContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(1.5),
+  width: 220,
+  background: theme.palette.mode === 'dark'
+    ? 'linear-gradient(145deg, #2a2a3a 0%, #1f1f2f 100%)'
+    : 'linear-gradient(145deg, #f5f7fa 0%, #e4e7eb 100%)',
+  padding: theme.spacing(0.8, 1.5),
+  borderRadius: 16,
+  border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.3)' : 'rgba(0, 0, 0, 0.1)'}`,
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+    : '0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  position: 'relative',
+  overflow: 'hidden',
+  '&:hover': {
+    transform: 'scale(1.02)',
+    boxShadow: theme.palette.mode === 'dark'
+      ? '0 6px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+      : '0 6px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
   },
   [theme.breakpoints.down("sm")]: {
-    width: 150,
+    width: 180,
   },
 }));
 
 const XPProgressBar = styled(LinearProgress)(({ theme }) => ({
-  height: 12,
-  borderRadius: 10,
-  backgroundColor: theme.palette.mode === 'dark' ? '#3A2A1A' : 'rgba(255, 255, 255, 0.3)',
+  height: 10,
+  borderRadius: 8,
+  backgroundColor: theme.palette.mode === 'dark' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(0, 0, 0, 0.1)',
   flex: 1,
   position: 'relative',
   overflow: 'hidden',
   '& .MuiLinearProgress-bar': {
-    borderRadius: 10,
+    borderRadius: 8,
     background: theme.palette.mode === 'dark'
-      ? 'linear-gradient(45deg, #FFD700 0%, #FFA500 25%, #FF6B35 50%, #F7931E 75%, #FFD700 100%)'
-      : 'linear-gradient(45deg, #00D4FF 0%, #00A8FF 25%, #0078FF 50%, #0066CC 75%, #004499 100%)',
-    transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+      ? 'linear-gradient(90deg, #3B82F6 0%, #60A5FA 50%, #3B82F6 100%)'
+      : 'linear-gradient(90deg, #1E3A8A 0%, #3B82F6 50%, #1E3A8A 100%)',
+    transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)',
     position: 'relative',
-    '&::after': {
+    '&::before': {
       content: '""',
       position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)',
-      animation: `${slideIn} 2s infinite`,
-    }
+      background: 'linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+      animation: `${shine} 2.5s infinite linear`,
+      backgroundSize: '200%',
+    },
   },
 }));
 
-// Coins Component
-const CoinsContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(0.5),
-  backgroundColor: theme.palette.mode === 'dark' 
-    ? 'linear-gradient(135deg, #2C1810 0%, #1A1A2E 100%)'
-    : 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
-  padding: theme.spacing(0.5, 1.5),
-  borderRadius: 25,
-  border: `2px solid ${theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF'}`,
-  boxShadow: theme.palette.mode === 'dark'
-    ? '0 4px 15px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-    : '0 4px 15px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-  transition: 'all 0.3s ease',
-  cursor: 'pointer',
-  position: 'relative',
-  overflow: 'hidden',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: '-100%',
-    width: '100%',
-    height: '100%',
-    background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
-    transition: 'left 0.6s ease',
-  },
-  '&:hover': {
-    transform: 'scale(1.05)',
-    boxShadow: theme.palette.mode === 'dark'
-      ? '0 6px 20px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-      : '0 6px 20px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
-    '&::before': {
-      left: '100%',
-    }
-  },
-  [theme.breakpoints.down("sm")]: {
-    padding: theme.spacing(0.3, 1),
-  },
-}));
-
-const CoinIcon = styled(MonetizationOnIcon)(({ theme }) => ({
-  color: theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF',
-  fontSize: '1.2rem',
-  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))',
-  animation: `${pulse} 2s infinite ease-in-out`,
-}));
-
-const CoinText = styled(Typography)(({ theme }) => ({
-  color: theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF',
-  fontWeight: 700,
-  fontSize: '0.9rem',
-  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-  letterSpacing: '0.5px',
-}));
-
-// Enhanced App Menu Animations
-const slideIn = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-`;
-
-const bounceIn = keyframes`
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-  70% {
-    transform: scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-`;
-
-const pulse = keyframes`
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
-
-const ripple = keyframes`
-  0% {
-    transform: scale(0);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(4);
-    opacity: 0;
-  }
-`;
-
-// Enhanced App Menu Components
+// App Menu Components
 const AppMenuContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
   width: 380,
@@ -393,7 +381,7 @@ const AppIcon = styled(Box)(({ theme }) => ({
     '&::after': {
       width: '100%',
       height: '100%',
-      animation: `${ripple} 0.6s ease-out`,
+      animation: `${shine} 0.6s ease-out`,
     },
     '& svg': {
       transform: 'scale(1.1)',
@@ -456,7 +444,6 @@ const AppMenuButton = styled(IconButton)(({ theme }) => ({
   }
 }));
 
-// Enhanced app menu items with more features
 const appMenuItems = [
   { 
     name: "E-Learning", 
@@ -527,7 +514,7 @@ const AppMenu = () => {
                     onClick={handleClose}
                     sx={{
                       animationDelay: `${index * 0.1}s`,
-                      animation: `${bounceIn} 0.6s ease-out backwards`
+                      animation: `${slideIn} 0.6s ease-out backwards`
                     }}
                   >
                     <Box position="relative">
@@ -586,20 +573,15 @@ const Layout1Topbar = () => {
   const { logout, user } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  // State for XP (starting at 200 as per the image)
   const [xp, setXp] = useState(user?.xp || 200);
-  const xpForNextLevel = 1500; // Match the image's max XP
+  const xpForNextLevel = 1500;
   const [progress, setProgress] = useState((xp / xpForNextLevel) * 100);
-  
-  // State for coins
   const [coins, setCoins] = useState(user?.coins || 1250);
 
-  // Update progress whenever XP changes
   useEffect(() => {
     setProgress((xp / xpForNextLevel) * 100);
   }, [xp]);
 
-  // Function to toggle between light and dark mode
   const toggleTheme = () => {
     const currentTheme = settings.theme?.palette?.type || 'light';
     const newThemeType = currentTheme === 'light' ? 'dark' : 'light';
@@ -652,7 +634,6 @@ const Layout1Topbar = () => {
         <Box display="flex" alignItems="center" gap={1}>
           <MatxSearchBox />
           
-          {/* Coins Display */}
           <Tooltip title="Your Coins Balance" arrow>
             <CoinsContainer>
               <CoinIcon />
@@ -662,16 +643,17 @@ const Layout1Topbar = () => {
             </CoinsContainer>
           </Tooltip>
           
-          {/* XP Progress Bar */}
           <Tooltip title={`${xp}/${xpForNextLevel} XP - Level Progress`} arrow>
             <XPProgressContainer>
               <Typography 
                 variant="caption" 
                 sx={{ 
-                  color: theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF',
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                  color: theme.palette.mode === 'dark' ? '#60A5FA' : '#1E3A8A',
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  textShadow: theme.palette.mode === 'dark'
+                    ? '0 1px 2px rgba(0,0,0,0.4)'
+                    : '0 1px 2px rgba(255,255,255,0.8)',
                 }}
               >
                 XP
@@ -680,10 +662,12 @@ const Layout1Topbar = () => {
               <Typography 
                 variant="caption" 
                 sx={{ 
-                  color: theme.palette.mode === 'dark' ? '#FFD700' : '#FFFFFF',
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                  color: theme.palette.mode === 'dark' ? '#60A5FA' : '#1E3A8A',
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  textShadow: theme.palette.mode === 'dark'
+                    ? '0 1px 2px rgba(0,0,0,0.4)'
+                    : '0 1px 2px rgba(255,255,255,0.8)',
                 }}
               >
                 {xp}/{xpForNextLevel}
@@ -691,10 +675,8 @@ const Layout1Topbar = () => {
             </XPProgressContainer>
           </Tooltip>
 
-          {/* Enhanced App Menu */}
           <AppMenu />
 
-          {/* Theme Toggle Button */}
           <Tooltip title={`Switch to ${isDarkMode ? "light" : "dark"} mode`}>
             <ThemeToggleButton onClick={toggleTheme} color="inherit">
               {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
@@ -705,7 +687,6 @@ const Layout1Topbar = () => {
             <NotificationBar />
           </NotificationProvider>
           
-          {/* User Menu */}
           <MatxMenu
             menuButton={
               <UserMenu>
