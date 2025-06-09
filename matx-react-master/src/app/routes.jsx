@@ -126,6 +126,8 @@ const routes = [
       { path: "/admin/reports", element: <Reports />, auth: authRoles.admin },
       { path: "/admin/settings", element: <Settings />, auth: authRoles.admin },
       { path: "/admin/help", element: <Help />, auth: authRoles.admin },
+
+      
     ]
   },
 
