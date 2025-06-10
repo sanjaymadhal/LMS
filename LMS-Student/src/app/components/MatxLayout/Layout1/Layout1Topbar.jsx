@@ -1,5 +1,5 @@
 import { memo, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import MenuItem from "@mui/material/MenuItem";
@@ -572,7 +572,7 @@ const Layout1Topbar = () => {
   const { settings, updateSettings } = useSettings();
   const { logout, user } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
-
+  const navigate = useNavigate();
   const [xp, setXp] = useState(user?.xp ?? 200);
   const xpForNextLevel = 1500;
   const [progress, setProgress] = useState(((user?.xp ?? 200) / xpForNextLevel) * 100);
@@ -617,7 +617,12 @@ const Layout1Topbar = () => {
     }
     updateSidebarMode({ mode });
   };
-
+  const handleLogout = () => {
+    // Perform any necessary cleanup
+    console.log("User logged out");
+    // Do not redirect to login page
+    navigate("/dashboard/default");
+  };
   const isDarkMode = theme.palette.mode === 'dark' || 
                      settings.theme?.palette?.type === 'dark' || 
                      false;

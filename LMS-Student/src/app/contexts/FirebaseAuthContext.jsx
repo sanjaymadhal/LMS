@@ -19,20 +19,15 @@ const auth = getAuth(app);
 
 const initialAuthState = {
   user: null,
-  isInitialized: false,
-  isAuthenticated: false
+  isInitialized: true,
+  isAuthenticated: true
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "FB_AUTH_STATE_CHANGED": {
-      const { isAuthenticated, user } = action.payload;
-      return { ...state, isAuthenticated, isInitialized: true, user };
-    }
 
-    default: {
+    default:
       return state;
-    }
   }
 };
 
