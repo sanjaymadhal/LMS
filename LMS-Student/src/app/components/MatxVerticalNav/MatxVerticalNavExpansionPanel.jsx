@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import Icon from "@mui/material/Icon";
 import Box from "@mui/material/Box";
@@ -83,12 +83,19 @@ export default function MatxVerticalNavExpansionPanel({ item, children, mode }) 
   const elementRef = useRef(null);
   const componentHeight = useRef(0);
   const { pathname } = useLocation();
-  const { name, icon, iconText, badge } = item;
+  const navigate = useNavigate();
+  const { name, icon, iconText, badge, path } = item;
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault();
     componentHeight.current = 0;
     calculateHeight(elementRef.current);
     setCollapsed(!collapsed);
+    
+    // Navigate to the parent path if it exists
+    if (path) {
+      navigate(path);
+    }
   };
 
   const calculateHeight = useCallback((node) => {

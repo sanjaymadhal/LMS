@@ -4,8 +4,8 @@ import React from 'react';
 const MyCourses = () => {
   return (
     <div>
-      <h1>Reports</h1>
-      <p>This is the My Reports page.</p>
+      <h1>Code Sandbox</h1>
+      <p>This is the Code Sandbox page.</p>
     </div>
   );
 };

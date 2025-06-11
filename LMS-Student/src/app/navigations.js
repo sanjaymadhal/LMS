@@ -1,16 +1,45 @@
 const navigations = [
   { name: "Dashboard", path: "/dashboard/default", icon: "dashboard" },
-  { name: "Live Classroom", path: "/live-classroom", icon: "videocam" },
-  { name: "Virtual Classroom", path: "/virtual-classroom", icon: "computer" },
+  { 
+    name: "Virtual Classroom", 
+    path: "/virtual-classroom", 
+    icon: "computer",
+    exact: true,
+    children: [
+      {
+        name: "Subjects",
+        icon: "book",
+        children: [
+          { name: "BCS601", iconText: "MC", path: "/courses/my-courses" },
+          { name: "BCS602", iconText: "CC", path: "/courses/create" },
+          { name: "BCS603", iconText: "CA", path: "/courses/archive" }
+        ]
+      },
+      {
+        name: "Assessments",
+        icon: "assessment",
+        children: [
+          { name: "Take Quiz", iconText: "CQ", path: "/assessments/Createquiz" },
+          { name: "Question Bank", iconText: "QB", path: "/assessments/Questionbank" },
+          { name: "Report Card", iconText: "ES", path: "/assessments/Examsettings" }
+        ]
+      },
+      {
+        name: "Assignments",
+        icon: "assignment",
+        children: [
+          { name: "Upload Assignment", iconText: "CA", path: "/assignments/create" },
+          { name: "Pending Assignments", iconText: "GA", path: "/assignments/grade" },
+          { name: "Assignment Library", iconText: "AL", path: "/assignments/library" }
+        ]
+      }
+    ]
+   },
   { label: "TEACHING", type: "label" },
   {
-    name: "Courses",
-    icon: "book",
-    children: [
-      { name: "BCS601", iconText: "MC", path: "/courses/my-courses" },
-      { name: "BCS602", iconText: "CC", path: "/courses/create" },
-      { name: "BCS603", iconText: "CA", path: "/courses/archive" }
-    ]
+    name: "Projects",
+    icon: "forum",
+    path: "/communication/forums"
   },
   { name: "Calendar", path: "/calendar", icon: "calendar_today" },
   { label: "CONTENT", type: "label" },
@@ -24,32 +53,14 @@ const navigations = [
     ]
   },
   {
-    name: "Assessments",
-    icon: "assessment",
-    children: [
-      { name: "Take Quiz", iconText: "CQ", path: "/assessments/Createquiz" },
-      { name: "Question Bank", iconText: "QB", path: "/assessments/Questionbank" },
-      { name: "Report Card", iconText: "ES", path: "/assessments/Examsettings" }
-    ]
-  },
-  {
     name: "AI Tools",
     icon: "psychology",
     path: "/ai-tools/content-generator",
   },
   {
-    name: "Reports",
+    name: "Code Sandbox",
     icon: "bar_chart",
     path: "/admin/reports"
-  },
-  {
-    name: "Assignments",
-    icon: "assignment",
-    children: [
-      { name: "Upload Assignment", iconText: "CA", path: "/assignments/create" },
-      { name: "Pending Assignments", iconText: "GA", path: "/assignments/grade" },
-      { name: "Assignment Library", iconText: "AL", path: "/assignments/library" }
-    ]
   },
   { label: "COMMUNICATION", type: "label" },
   {
@@ -62,13 +73,8 @@ const navigations = [
     icon: "announcement",
     path: "/communication/announcements"
   },
-  {
-    name: "Discussion Forums",
-    icon: "forum",
-    path: "/communication/forums"
-  },
+ 
   { label: "ADMINISTRATION", type: "label" },
-  
   {
     name: "Settings",
     icon: "settings",
